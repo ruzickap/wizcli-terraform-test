@@ -1,0 +1,57 @@
+name: trivy_checkov_wizcli
+on:
+  workflow_dispatch:
+  pull_request:
+    types:
+      - synchronize
+      - opened
+
+defaults:
+  run:
+    shell: bash -euxo pipefail {0}
+
+jobs:
+  trivy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Run Trivy vulnerability scanner 🔍
+        uses: aquasecurity/trivy-action@0.28.0
+        with:
+          scan-type: 'fs'
+          scan-ref: '.'
+          format: 'table'
+          scanners: "misconfig"
+
+  checkov:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Checkov GitHub Action 🛡️
+        uses: bridgecrewio/checkov-action@v12
+        with:
+          output_format: cli
+          soft_fail: true
+          check: CKV_AWS_79
+
+  wizcli:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Download Wiz CLI
+        run: curl -Lo wizcli https://downloads.wiz.io/wizcli/latest/wizcli-linux-amd64 && chmod +x wizcli
+
+      - name: Authenticate to Wiz
+        run: ./wizcli auth --id "${WIZ_CLIENT_ID}" --secret "${WIZ_CLIENT_SECRET}"
+        env:
+          WIZ_CLIENT_ID: ${{ secrets.WIZ_CLIENT_ID }}
+          WIZ_CLIENT_SECRET: ${{ secrets.WIZ_CLIENT_SECRET }}
+
+      - name: Run wiz-cli scan
+        run: ./wizcli iac scan --path . --name "${GITHUB_REPOSITORY}" --tag git-repository="${GITHUB_REPOSITORY}",git-repo-url="${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}",git-ref-name="${GITHUB_REF_NAME}",triggered-by="${GITHUB_TRIGGERING_ACTOR}",git-sha="${GITHUB_WORKFLOW_SHA}",git-commit-url="${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/commit/${GITHUB_WORKFLOW_SHA}",gh-workflow="${GITHUB_WORKFLOW}",gh-run-url="${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}"
