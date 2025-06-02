@@ -23,6 +23,8 @@ jobs:
         id: set_tf_dirs
         run: |
           TF_DIRS=$(find . -type f -name "*.tf" -exec dirname {} \; | sort | uniq | jq -R -s -c 'split("\n")[:-1]')
+          echo "tf_dirs=${TF_DIRS}" >> "${GITHUB_OUTPUT}"
+
 
   tf-directory-jobs:
     needs: get-tf-directories
