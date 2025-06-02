@@ -86,7 +86,5 @@ jobs:
         working-directory: ${{ matrix.tf-dir }}
         run: |
           terraform init
-          terraform plan -out plan.tfplanjson
-          terraform plan -out=tfplan.binary
-          terraform show -json tfplan.binary > tfplan.json
-          wizcli iac scan --path tfplan.json --name "${GITHUB_REPOSITORY}" --tag git-repository="${GITHUB_REPOSITORY}",git-repo-url="${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}",git-ref-name="${GITHUB_REF_NAME}",triggered-by="${GITHUB_TRIGGERING_ACTOR}",git-sha="${GITHUB_WORKFLOW_SHA}",git-commit-url="${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/commit/${GITHUB_WORKFLOW_SHA}",gh-workflow="${GITHUB_WORKFLOW}",gh-run-url="${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}"
+          terraform plan -refresh=false -out plan.tfplan && terraform show -json plan.tfplan | jq -er . > plan.tfplanjson
+          wizcli iac scan --path plan.tfplanjson --name "${GITHUB_REPOSITORY}" --tag git-repository="${GITHUB_REPOSITORY}",git-repo-url="${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}",git-ref-name="${GITHUB_REF_NAME}",triggered-by="${GITHUB_TRIGGERING_ACTOR}",git-sha="${GITHUB_WORKFLOW_SHA}",git-commit-url="${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/commit/${GITHUB_WORKFLOW_SHA}",gh-workflow="${GITHUB_WORKFLOW}",gh-run-url="${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}"
