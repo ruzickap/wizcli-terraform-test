@@ -29,6 +29,7 @@ jobs:
   tf-directory-jobs:
     needs: get-tf-directories
     runs-on: ubuntu-latest
+    name: Run tasks in Terraform directory ${{ matrix.tf-dir }}
     strategy:
       matrix:
         tf-dir: ${{ fromJson(needs.get-tf-directories.outputs.tf_dirs) }}
@@ -66,10 +67,12 @@ jobs:
           sudo mv terraform /usr/local/bin/
 
       - name: Download Wiz CLI
-        run: curl -Lo wizcli https://downloads.wiz.io/wizcli/latest/wizcli-linux-amd64 && chmod +x wizcli
+        run: |
+          sudo curl -Lo /usr/local/bin/wizcli https://downloads.wiz.io/wizcli/latest/wizcli-linux-amd64
+          chmod +x /usr/local/bin/wizcli
 
       - name: Authenticate to Wiz
-        run: ./wizcli auth --id "${WIZ_CLIENT_ID}" --secret "${WIZ_CLIENT_SECRET}"
+        run: wizcli auth --id "${WIZ_CLIENT_ID}" --secret "${WIZ_CLIENT_SECRET}"
         env:
           WIZ_CLIENT_ID: ${{ secrets.WIZ_CLIENT_ID }}
           WIZ_CLIENT_SECRET: ${{ secrets.WIZ_CLIENT_SECRET }}
@@ -77,7 +80,7 @@ jobs:
       - name: 🔍 Run wiz-cli directory scan
         working-directory: ${{ matrix.tf-dir }}
         run: |
-          ./wizcli iac scan --path . --name "${GITHUB_REPOSITORY}" --tag git-repository="${GITHUB_REPOSITORY}",git-repo-url="${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}",git-ref-name="${GITHUB_REF_NAME}",triggered-by="${GITHUB_TRIGGERING_ACTOR}",git-sha="${GITHUB_WORKFLOW_SHA}",git-commit-url="${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/commit/${GITHUB_WORKFLOW_SHA}",gh-workflow="${GITHUB_WORKFLOW}",gh-run-url="${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}"
+          wizcli iac scan --path . --name "${GITHUB_REPOSITORY}" --tag git-repository="${GITHUB_REPOSITORY}",git-repo-url="${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}",git-ref-name="${GITHUB_REF_NAME}",triggered-by="${GITHUB_TRIGGERING_ACTOR}",git-sha="${GITHUB_WORKFLOW_SHA}",git-commit-url="${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/commit/${GITHUB_WORKFLOW_SHA}",gh-workflow="${GITHUB_WORKFLOW}",gh-run-url="${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}"
 
       - name: 🔍 Run wiz-cli TF plan scan
         working-directory: ${{ matrix.tf-dir }}
@@ -86,4 +89,4 @@ jobs:
           terraform plan -out plan.tfplanjson
           terraform plan -out=tfplan.binary
           terraform show -json tfplan.binary > tfplan.json
-          ./wizcli iac scan --path tfplan.json --name "${GITHUB_REPOSITORY}" --tag git-repository="${GITHUB_REPOSITORY}",git-repo-url="${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}",git-ref-name="${GITHUB_REF_NAME}",triggered-by="${GITHUB_TRIGGERING_ACTOR}",git-sha="${GITHUB_WORKFLOW_SHA}",git-commit-url="${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/commit/${GITHUB_WORKFLOW_SHA}",gh-workflow="${GITHUB_WORKFLOW}",gh-run-url="${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}"
+          wizcli iac scan --path tfplan.json --name "${GITHUB_REPOSITORY}" --tag git-repository="${GITHUB_REPOSITORY}",git-repo-url="${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}",git-ref-name="${GITHUB_REF_NAME}",triggered-by="${GITHUB_TRIGGERING_ACTOR}",git-sha="${GITHUB_WORKFLOW_SHA}",git-commit-url="${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/commit/${GITHUB_WORKFLOW_SHA}",gh-workflow="${GITHUB_WORKFLOW}",gh-run-url="${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}"
