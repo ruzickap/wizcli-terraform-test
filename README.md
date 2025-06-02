@@ -5,5 +5,5 @@ like Checkov or Trivy, but not by Wiz CLI.
 
 Tests:
 
-* [ec2-imdsv1.tf](./ec2-imdsv1.tf) - Both instances should be flagged as
+* [ec2-imdsv1.tf](./tf-ec2-imdsv1/ec2-imdsv1.tf) - Both instances should be flagged as
 non-compliant because they are configured to use IMDSv1.
