@@ -37,14 +37,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Run task in Terraform directory
-        working-directory: ${{ matrix.tf-dir }}
-        run: |
-          echo "Running tasks in directory: ${{ matrix.tf-dir }}"
-          # Place your per-directory tasks here, e.g. terraform init/validate/plan
-          ls -la
-
-      - name: 🔍 Run Trivy vulnerability scanner
+      - name: 🔍 Run Trivy scanner
         uses: aquasecurity/trivy-action@0.28.0
         with:
           scan-type: fs
@@ -52,7 +45,7 @@ jobs:
           format: table
           scanners: misconfig
 
-      - name: 🔍 Checkov GitHub Action
+      - name: 🔍 Run Checkov scanner
         uses: bridgecrewio/checkov-action@v12
         with:
           directory: ${{ matrix.tf-dir }}
@@ -77,12 +70,12 @@ jobs:
           WIZ_CLIENT_ID: ${{ secrets.WIZ_CLIENT_ID }}
           WIZ_CLIENT_SECRET: ${{ secrets.WIZ_CLIENT_SECRET }}
 
-      - name: 🔍 Run wiz-cli directory scan
+      - name: 🔍 Run WizCLI directory scan
         working-directory: ${{ matrix.tf-dir }}
         run: |
           wizcli iac scan --path . --name "${GITHUB_REPOSITORY}" --tag git-repository="${GITHUB_REPOSITORY}",git-repo-url="${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}",git-ref-name="${GITHUB_REF_NAME}",triggered-by="${GITHUB_TRIGGERING_ACTOR}",git-sha="${GITHUB_WORKFLOW_SHA}",git-commit-url="${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/commit/${GITHUB_WORKFLOW_SHA}",gh-workflow="${GITHUB_WORKFLOW}",gh-run-url="${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}"
 
-      - name: 🔍 Run wiz-cli TF plan scan
+      - name: 🔍 Run WizCLI TF plan scan
         working-directory: ${{ matrix.tf-dir }}
         run: |
           terraform init
