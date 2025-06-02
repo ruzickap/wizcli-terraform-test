@@ -84,6 +84,10 @@ jobs:
 
       - name: 🔍 Run wiz-cli TF plan scan
         working-directory: ${{ matrix.tf-dir }}
+        env:
+          AWS_ACCESS_KEY_ID: xxxxxxxxxxxxxxxxxxxxxx
+          AWS_SECRET_ACCESS_KEY: xxxxxxxxxxxxxxxxxxxxxx
+          AWS_REGION: us-east-1
         run: |
           terraform init
           terraform plan -refresh=false -out plan.tfplan && terraform show -json plan.tfplan | jq -er . > plan.tfplanjson
