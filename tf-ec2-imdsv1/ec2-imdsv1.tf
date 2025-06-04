@@ -41,11 +41,11 @@
 
 # HIGH: Instance does not require IMDS access to require a token.
 # ════════════════════════════════════════
-# IMDS v2 (Instance Metadata Service) introduced session authentication tokens which improve security when talking to IMDS.
+# IMDS v2 (Instance Metadata Service) introduced session authentication tokens that improve security when talking to IMDS.
 
 # By default <code>aws_instance</code> resource sets IMDS session auth tokens to be optional.
 
-# To fully protect IMDS you need to enable session tokens by using <code>metadata_options</code> block and its <code>http_tokens</code> variable set to <code>required</code>.
+# To fully protect IMDS, you need to enable session tokens by using the <code>metadata_options</code> block and setting its <code>http_tokens</code> variable to <code>required</code>.
 
 
 # See https://avd.aquasec.com/misconfig/avd-aws-0028
@@ -69,11 +69,11 @@
 # ...
 # HIGH: Instance does not require IMDS access to require a token.
 # ════════════════════════════════════════
-# IMDS v2 (Instance Metadata Service) introduced session authentication tokens which improve security when talking to IMDS.
+# IMDS v2 (Instance Metadata Service) introduced session authentication tokens that improve security when talking to IMDS.
 
 # By default <code>aws_instance</code> resource sets IMDS session auth tokens to be optional.
 
-# To fully protect IMDS you need to enable session tokens by using <code>metadata_options</code> block and its <code>http_tokens</code> variable set to <code>required</code>.
+# To fully protect IMDS, you need to enable session tokens by using the <code>metadata_options</code> block and setting its <code>http_tokens</code> variable to <code>required</code>.
 
 
 # See https://avd.aquasec.com/misconfig/avd-aws-0028
@@ -114,7 +114,7 @@ provider "aws" {
 }
 
 locals {
-  http_tokens = "optional"
+  http_tokens = "required"
 }
 
 resource "aws_instance" "bad_instance" {
@@ -123,7 +123,7 @@ resource "aws_instance" "bad_instance" {
 
   metadata_options {
     http_endpoint = "enabled"
-    http_tokens   = "optional"
+    http_tokens   = "required"
   }
 }
 

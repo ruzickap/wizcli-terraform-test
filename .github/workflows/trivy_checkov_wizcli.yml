@@ -52,11 +52,11 @@ jobs:
           output_format: cli
           soft_fail: true
 
-      - name: Download Wiz CLI
+      - name: Download and Install Terraform
         working-directory: /tmp
         run: |
-          wget -q https://releases.hashicorp.com/terraform/1.12.1/terraform_1.12.1_linux_amd64.zip
-          unzip -q terraform_1.12.1_linux_amd64.zip
+          wget -q https://releases.hashicorp.com/terraform/1.9.8/terraform_1.9.8_linux_amd64.zip
+          unzip -q terraform_1.9.8_linux_amd64.zip
           sudo mv terraform /usr/local/bin/
 
       - name: Download Wiz CLI
