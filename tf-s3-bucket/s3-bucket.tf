@@ -34,6 +34,15 @@ terraform {
   }
 }
 
+provider "aws" {
+  access_key                  = "xxxxxxxxxxxxxxxxxxxxxx"
+  region                      = "us-east-1"
+  secret_key                  = "xxxxxxxxxxxxxxxxxxxxxx"
+  skip_credentials_validation = true
+  skip_metadata_api_check     = true
+  skip_requesting_account_id  = true
+}
+
 module "s3-bucket" {
   # checkov:skip=CKV_AWS_300: encryption handled externally
   source                  = "git::https://github.com/terraform-aws-modules/terraform-aws-s3-bucket.git?ref=0d781fbb515b1f64c46bfba04153bef091d50fc5"
