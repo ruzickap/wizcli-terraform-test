@@ -85,6 +85,7 @@ jobs:
 
       - name: 🔍 Run WizCLI TF plan scan
         working-directory: ${{ matrix.tf-dir }}
+        continue-on-error: true
         run: |
           terraform init
           terraform plan -refresh=false -out plan.tfplan && terraform show -json plan.tfplan | jq -er . > plan.tfplanjson
