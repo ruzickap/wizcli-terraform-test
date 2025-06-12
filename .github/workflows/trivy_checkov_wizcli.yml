@@ -31,7 +31,7 @@ jobs:
     runs-on: ubuntu-latest
     name: ${{ matrix.tf-dir }}
     strategy:
-      fail-fast: true
+      fail-fast: false
       matrix:
         tf-dir: ${{ fromJson(needs.get-tf-directories.outputs.tf_dirs) }}
     steps:
