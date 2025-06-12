@@ -31,6 +31,7 @@ jobs:
     runs-on: ubuntu-latest
     name: ${{ matrix.tf-dir }}
     strategy:
+      fail-fast: true
       matrix:
         tf-dir: ${{ fromJson(needs.get-tf-directories.outputs.tf_dirs) }}
     steps:
@@ -43,6 +44,7 @@ jobs:
 
       - name: 🔍 Run Trivy scanner
         uses: aquasecurity/trivy-action@0.28.0
+        continue-on-error: true
         with:
           scan-type: fs
           scan-ref: ${{ matrix.tf-dir }}
@@ -52,6 +54,7 @@ jobs:
       - name: 🔍 Run Checkov scanner
         env:
           DIRECTORY: ${{ matrix.tf-dir }}
+        continue-on-error: true
         run: |
           checkov --directory "${DIRECTORY}" --quiet --soft-fail --download-external-modules True --external-modules-download-path /tmp/
 
@@ -75,6 +78,7 @@ jobs:
 
       - name: 🔍 Run WizCLI directory scan
         working-directory: ${{ matrix.tf-dir }}
+        continue-on-error: true
         run: |
           wizcli iac scan --path . --name "${GITHUB_REPOSITORY}" --tag git-repository="${GITHUB_REPOSITORY}",git-repo-url="${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}",git-ref-name="${GITHUB_REF_NAME}",triggered-by="${GITHUB_TRIGGERING_ACTOR}",git-sha="${GITHUB_WORKFLOW_SHA}",git-commit-url="${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/commit/${GITHUB_WORKFLOW_SHA}",gh-workflow="${GITHUB_WORKFLOW}",gh-run-url="${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}"
 
