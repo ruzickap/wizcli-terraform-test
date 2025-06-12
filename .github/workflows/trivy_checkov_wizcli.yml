@@ -40,7 +40,9 @@ jobs:
 
       - name: Install checkov
         run: |
-          pip3 install checkov
+          eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+          brew install wizcli
+          brew install checkov
 
       - name: 🔍 Run Trivy scanner
         uses: aquasecurity/trivy-action@0.28.0
@@ -65,10 +67,10 @@ jobs:
           unzip -q terraform_1.9.8_linux_amd64.zip
           sudo mv terraform /usr/local/bin/
 
-      - name: Download Wiz CLI
-        run: |
-          sudo curl -Lso /usr/local/bin/wizcli https://downloads.wiz.io/wizcli/latest/wizcli-linux-amd64
-          sudo chmod +x /usr/local/bin/wizcli
+      # - name: Download Wiz CLI
+      #   run: |
+      #     sudo curl -Lso /usr/local/bin/wizcli https://downloads.wiz.io/wizcli/latest/wizcli-linux-amd64
+      #     sudo chmod +x /usr/local/bin/wizcli
 
       - name: Authenticate to Wiz
         run: wizcli auth --id "${WIZ_CLIENT_ID}" --secret "${WIZ_CLIENT_SECRET}"
