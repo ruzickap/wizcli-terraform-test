@@ -37,6 +37,10 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      - name: Install checkov
+        run: |
+          pip3 install checkov
+
       - name: 🔍 Run Trivy scanner
         uses: aquasecurity/trivy-action@0.28.0
         with:
@@ -49,7 +53,6 @@ jobs:
         env:
           DIRECTORY: ${{ matrix.tf-dir }}
         run: |
-          pip3 install checkov
           checkov --directory "${DIRECTORY}" --quiet --output cli --soft-fail-on SOFT_FAIL_ON --download-external-modules
 
       - name: Download and Install Terraform
