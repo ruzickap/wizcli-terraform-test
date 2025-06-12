@@ -25,7 +25,6 @@ jobs:
           TF_DIRS=$(find . -type f -name "*.tf" -exec dirname {} \; | sort | uniq | jq -R -s -c 'split("\n")[:-1]')
           echo "tf_dirs=${TF_DIRS}" >> "${GITHUB_OUTPUT}"
 
-
   tf-directory-jobs:
     needs: get-tf-directories
     runs-on: ubuntu-latest
@@ -41,7 +40,6 @@ jobs:
       - name: Install checkov
         run: |
           eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
-          brew install wizcli
           brew install checkov
 
       - name: 🔍 Run Trivy scanner
@@ -67,10 +65,10 @@ jobs:
           unzip -q terraform_1.9.8_linux_amd64.zip
           sudo mv terraform /usr/local/bin/
 
-      # - name: Download Wiz CLI
-      #   run: |
-      #     sudo curl -Lso /usr/local/bin/wizcli https://downloads.wiz.io/wizcli/latest/wizcli-linux-amd64
-      #     sudo chmod +x /usr/local/bin/wizcli
+      - name: Download Wiz CLI
+        run: |
+          sudo curl -Lso /usr/local/bin/wizcli https://downloads.wiz.io/wizcli/latest/wizcli-linux-amd64
+          sudo chmod +x /usr/local/bin/wizcli
 
       - name: Authenticate to Wiz
         run: wizcli auth --id "${WIZ_CLIENT_ID}" --secret "${WIZ_CLIENT_SECRET}"
