@@ -52,11 +52,11 @@ jobs:
           scanners: misconfig
 
       - name: 🔍 Run Checkov scanner
-        env:
-          DIRECTORY: ${{ matrix.tf-dir }}
+        working-directory: ${{ matrix.tf-dir }}
         continue-on-error: true
         run: |
-          checkov --directory "${DIRECTORY}" --quiet --soft-fail --download-external-modules True --external-modules-download-path /tmp/
+          ls -la
+          checkov --directory . --quiet --soft-fail --download-external-modules True --external-modules-download-path /tmp/
 
       - name: Download and Install Terraform
         working-directory: /tmp
