@@ -55,7 +55,6 @@ jobs:
         working-directory: ${{ matrix.tf-dir }}
         continue-on-error: true
         run: |
-          ls -la
           checkov --directory . --quiet --soft-fail --download-external-modules True --external-modules-download-path /tmp/
 
       - name: Download and Install Terraform
