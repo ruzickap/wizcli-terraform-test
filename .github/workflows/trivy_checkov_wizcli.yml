@@ -50,7 +50,7 @@ jobs:
           DIRECTORY: ${{ matrix.tf-dir }}
         run: |
           pip3 install checkov
-          checkov --directory "${DIRECTORY}" --output cli --soft-fail-on SOFT_FAIL_ON --download-external-modules
+          checkov --directory "${DIRECTORY}" --quiet --output cli --soft-fail-on SOFT_FAIL_ON --download-external-modules
 
       - name: Download and Install Terraform
         working-directory: /tmp
