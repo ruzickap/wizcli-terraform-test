@@ -60,6 +60,23 @@
 
 # Noting...
 
+terraform {
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = "5.91.0"
+    }
+  }
+}
+
+provider "aws" {
+  access_key                  = "xxxxxxxxxxxxxxxxxxxxxx"
+  region                      = "us-east-1"
+  secret_key                  = "xxxxxxxxxxxxxxxxxxxxxx"
+  skip_credentials_validation = true
+  skip_metadata_api_check     = true
+  skip_requesting_account_id  = true
+}
 
 resource "aws_iam_role" "role-1" {
   name = "admin-role-1"
