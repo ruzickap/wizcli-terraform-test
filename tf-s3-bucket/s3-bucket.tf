@@ -25,6 +25,36 @@
 # 		1076 | }
 # ...
 
+## Trivy:
+
+# ...
+# AVD-AWS-0086 (HIGH): Public access block does not block public ACLs
+# ═══════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════
+# S3 buckets should block public ACLs on buckets and any objects they contain. By blocking, PUTs with fail if the object has any public ACL a.
+
+
+# See https://avd.aquasec.com/misconfig/avd-aws-0086
+# ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+#  git::https:/github.com/terraform-aws-modules/terraform-aws-s3-bucket.git?ref=0d781fbb515b1f64c46bfba04153bef091d50fc5/main.tf:1072
+#    via git::https:/github.com/terraform-aws-modules/terraform-aws-s3-bucket.git?ref=0d781fbb515b1f64c46bfba04153bef091d50fc5/main.tf:1067-1076 (aws_s3_bucket_public_access_block.this[0])
+#     via s3-bucket.tf:48-55 (module.s3-bucket)
+# ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+# 1067   resource "aws_s3_bucket_public_access_block" "this" {
+# 1068     count = local.create_bucket && var.attach_public_policy && !var.is_directory_bucket ? 1 : 0
+# 1069
+# 1070     bucket = aws_s3_bucket.this[0].id
+# 1071
+# 1072 [   block_public_acls       = var.block_public_acls
+# 1073     block_public_policy     = var.block_public_policy
+# 1074     ignore_public_acls      = var.ignore_public_acls
+# 1075     restrict_public_buckets = var.restrict_public_buckets
+# 1076   }
+# ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+# ...
+
+## Wiz CLI:
+
+# Noting...
 
 
 terraform {

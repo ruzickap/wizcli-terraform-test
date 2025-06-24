@@ -10,3 +10,6 @@ Tests:
 
 * [s3-bucket.ft](./tf-s3-bucket/s3-bucket.tf) - public s3 bucket created using
   TF module
+
+* [iam.tf](./tf-iam/iam.tf) - creates an IAM role and attaches the
+  AdministratorAccess policy to it
