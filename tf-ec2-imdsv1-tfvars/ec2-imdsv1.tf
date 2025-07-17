@@ -8,11 +8,11 @@
 
 # ...
 # Check: CKV_AWS_79: "Ensure Instance Metadata Service Version 1 is not enabled"
-# 	FAILED for resource: aws_instance.bad_instance
+# 	FAILED for resource: aws_instance.bad_instance_4
 # 	File: /ec2-imdsv1.tf:42-50
 # 	Guide: https://docs.prismacloud.io/en/enterprise-edition/policy-reference/aws-policies/aws-general-policies/bc-aws-general-31
 
-# 		42 | resource "aws_instance" "bad_instance" {
+# 		42 | resource "aws_instance" "bad_instance_4" {
 # 		43 |   ami           = "ami-0c55b159cbfafe1f0"
 # 		44 |   instance_type = "t2.micro"
 # 		45 |
@@ -49,7 +49,7 @@ variable "http_tokens" {
   type = string
 }
 
-resource "aws_instance" "bad_instance" {
+resource "aws_instance" "bad_instance_4" {
   ami           = "ami-0c55b159cbfafe1f0"
   instance_type = "t2.micro"
 
