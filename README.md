@@ -13,3 +13,6 @@ Tests:
 
 * [iam.tf](./tf-iam/iam.tf) - creates an IAM role and attaches the
   AdministratorAccess policy to it
+
+* [ec2-imdsv1.tf](./tf-ec2-imdsv1-tfvars/ec2-imdsv1.tf) - instance should be
+  flagged as non-compliant because it is configured to use IMDSv1
