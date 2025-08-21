@@ -23,7 +23,7 @@ variable "vpc_id" {
 
 terraform {
   required_version = ">= 1.4.0"
-
+  
   required_providers {
     aws = {
       source  = "hashicorp/aws"
@@ -34,6 +34,7 @@ terraform {
 
 provider "aws" {
   region = "us-east-1"
+  skip_credentials_validation = true
 }
 
 resource "aws_security_group" "elasticsearch_sg" {
@@ -62,7 +63,6 @@ resource "aws_security_group" "elasticsearch_sg" {
 
   tags = {
     Name        = "elasticsearch-security-group"
-    Environment = "production"
     Service     = "elasticsearch"
   }
 }
