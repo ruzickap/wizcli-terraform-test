@@ -6,6 +6,9 @@ on:
       - synchronize
       - opened
 
+permissions:
+  contents: read
+
 defaults:
   run:
     shell: bash -euxo pipefail {0}
